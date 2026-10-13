@@ -5,3 +5,6 @@ node_modules/
 
 # nbb dependency cache (nbb.edn :deps)
 .nbb/
+
+# scratch commit-message drafts -- never source
+/COMMIT_MSG.txt
