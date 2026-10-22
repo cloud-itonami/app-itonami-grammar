@@ -1,0 +1,77 @@
+#!/usr/bin/env kbb
+;; Generate the VS Code light and dark themes from themes/kotoba-awai.json.
+;;
+;;   kbb --backend sci tools/gen-vscode-theme.cljk
+;;   kbb --backend sci tools/gen-vscode-theme.cljk --check
+
+(require '["node:fs" :as fs])
+
+(def theme-path "themes/kotoba-awai.json")
+(def output-dir "editors/vscode/themes")
+(def token-order
+  ["comment" "string" "escape" "number" "literal" "keyword" "form"
+   "builtin" "host-op" "definition" "delimiter" "symbol" "forbidden"])
+(def theme-targets
+  [{:mode :light :name "kotoba-awai-light-color-theme.json"}
+   {:mode :dark :name "kotoba-awai-dark-color-theme.json"}])
+
+(defn- message [text code]
+  (println text)
+  (set! (.-exitCode js/process) code)
+  nil)
+
+(defn- token-colors [theme mode]
+  (mapv (fn [token]
+          (let [entry (get-in theme [:tokens (keyword token)])
+                settings (cond-> {:foreground (get entry mode)}
+                           (:fontStyle entry)
+                           (assoc :fontStyle (:fontStyle entry)))]
+            {:name (:name entry)
+             :scope (:scopes entry)
+             :settings settings}))
+        token-order))
+
+(defn- render-theme [theme mode]
+  (let [definition (get-in theme [:themes mode])]
+    {:$schema "vscode://schemas/color-theme"
+     :name (:name definition)
+     :type (:type definition)
+     :colors (:ui definition)
+     :tokenColors (token-colors theme mode)}))
+
+(defn -main [args]
+  (let [check? (some #{"--check"} args)]
+    (if-not (fs/existsSync theme-path)
+      (message (str "cannot read " theme-path) 2)
+      (let [theme (try
+                    (js->clj (js/JSON.parse (fs/readFileSync theme-path "utf8"))
+                             :keywordize-keys true)
+                    (catch :default _ nil))]
+        (if-not (and (= 1 (:version theme))
+                     (every? #(get-in theme [:tokens (keyword %)]) token-order)
+                     (get-in theme [:themes :light :ui])
+                     (get-in theme [:themes :dark :ui]))
+          (message (str "invalid or unreadable theme manifest: " theme-path) 2)
+          (let [outputs (mapv (fn [{:keys [mode name]}]
+                                (let [path (str output-dir "/" name)
+                                      json (str (js/JSON.stringify
+                                                 (clj->js (render-theme theme mode)) nil 2)
+                                                "\n")]
+                                  {:path path :json json}))
+                              theme-targets)
+                stale (filter (fn [{:keys [path json]}]
+                                (not (and (fs/existsSync path)
+                                          (= json (fs/readFileSync path "utf8")))))
+                              outputs)]
+            (if check?
+              (if (seq stale)
+                (do (doseq [{:keys [path]} stale] (println (str "STALE " path)))
+                    (set! (.-exitCode js/process) 1))
+                (doseq [{:keys [path]} outputs] (println (str "FRESH " path))))
+              (do
+                (fs/mkdirSync output-dir #js {:recursive true})
+                (doseq [{:keys [path json]} outputs]
+                  (fs/writeFileSync path json)
+                  (println (str "wrote " path)))))))))))
+
+(-main (vec (drop 3 (js->clj js/process.argv))))

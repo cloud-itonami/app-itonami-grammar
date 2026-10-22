@@ -1,9 +1,10 @@
 {
   "name": "kotoba",
   "displayName": "Kotoba",
-  "description": "Syntax highlighting for Kotoba, including the heads the language refuses.",
-  "version": "0.1.0",
+  "description": "Awai color themes and a local language server for Kotoba.",
+  "version": "0.2.0",
   "publisher": "kotoba-lang",
+  "main": "./extension.js",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -14,7 +15,18 @@
     "url": "https://github.com/kotoba-lang/grammar/issues"
   },
   "engines": {
-    "vscode": "^1.75.0"
+    "vscode": "^1.91.0"
+  },
+  "activationEvents": [
+    "onLanguage:kotoba"
+  ],
+  "dependencies": {
+    "vscode-languageclient": "10.1.2",
+    "vscode-languageserver": "10.1.2",
+    "vscode-languageserver-textdocument": "1.0.15"
+  },
+  "bin": {
+    "kotoba-lsp": "./server/server.js"
   },
   "categories": [
     "Programming Languages"
@@ -22,12 +34,14 @@
   "keywords": [
     "kotoba",
     "language",
+    "language-server",
     "syntax-highlighting",
+    "color-theme",
     "textmate",
     "capability-security"
   ],
   "galleryBanner": {
-    "color": "#111827",
+    "color": "#1e50a2",
     "theme": "dark"
   },
   "capabilities": {
@@ -57,6 +71,18 @@
         "language": "kotoba",
         "scopeName": "source.kotoba",
         "path": "./syntaxes/kotoba.tmLanguage.json"
+      }
+    ],
+    "themes": [
+      {
+        "label": "Kotoba Awai Light",
+        "uiTheme": "vs",
+        "path": "./themes/kotoba-awai-light-color-theme.json"
+      },
+      {
+        "label": "Kotoba Awai Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/kotoba-awai-dark-color-theme.json"
       }
     ]
   }

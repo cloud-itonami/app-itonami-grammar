@@ -1,7 +1,7 @@
 # Kotoba for VS Code
 
-Syntax highlighting for `.kotoba`, from the same grammar this repository
-generates for github-linguist.
+Syntax highlighting and a local language server for `.kotoba`, using the same
+grammar this repository generates for GitHub Linguist.
 
 It also scopes the heads Kotoba refuses. `(atom x)`, `(eval x)`, `(swap! …)` —
 the `:forbidden-heads` in `resources/kotoba/lang/guest-grammar.edn` — get
@@ -10,7 +10,43 @@ scope Clojure's grammar would give them. Every theme renders that as an error,
 so the no-ambient-authority invariant shows up while you type instead of when
 the compiler fails closed on it.
 
-## What it does not do
+## Awai themes
+
+The extension includes **Kotoba Awai Light** and **Kotoba Awai Dark**. The light
+theme uses Awai's Aka (`#bc002d`), Ao (`#1e50a2`), Shiro (`#ffffff`) and Kuro
+(`#14110f`), with Sumi and deep tones mixed from those four. The dark theme
+keeps the same roles and lightens the foreground tones against Kuro. Blue marks
+forms and structure; red marks forbidden forms and host operations; comments
+and delimiters use Sumi. Both files are generated from the shared
+[`themes/kotoba-awai.json`](../../themes/kotoba-awai.json) token map, which also
+drives the Kotoba site's syntax colors.
+
+Choose the theme through **Preferences: Color Theme**. Installing the language
+extension does not change the user's existing editor-wide theme.
+
+## Language server
+
+The extension starts `server/server.js` as a local stdio language server. It
+uses the bundled TextMate grammar's forbidden-head rule, so the diagnostic list
+does not carry a second copy of the forbidden vocabulary. It currently reports
+forbidden Kotoba forms, unmatched or unclosed delimiters, and unterminated
+strings as the document opens or changes. The server keeps document state in
+memory and does not make network requests.
+
+To start the server directly from the repository root:
+
+```bash
+npm install --prefix editors/vscode
+node editors/vscode/server/server.js
+```
+
+The process reads and writes LSP `Content-Length` frames on stdin/stdout; use
+stderr for any launch diagnostics. This first server does not yet provide
+completion, go-to-definition, or compiler-backed diagnostics. Amu consumes
+`.kotoba` source, so the same language ID and grammar cover files checked by
+Amu; there is no separate `.amu` source language.
+
+## GitHub language display
 
 **It does not make GitHub display Kotoba.** GitHub reads
 `lib/linguist/languages.yml`, not an editor extension, and Kotoba is not in it
@@ -34,10 +70,13 @@ ext install kotoba-lang.kotoba
 
 ```bash
 kbb --backend sci tools/gen-vscode-grammar.cljk     # from the repository root
+npm install --prefix editors/vscode
 ln -s "$PWD/editors/vscode" ~/.vscode/extensions/kotoba
 ```
 
-Reload the window. `.kotoba` files report `kotoba` in the language picker.
+Reload the window. `.kotoba` files report `kotoba` in the language picker and
+start the language server. Select a Kotoba Awai theme from **Preferences: Color
+Theme** when you want the included palette.
 
 ## The grammar here is generated
 
