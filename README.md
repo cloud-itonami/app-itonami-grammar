@@ -70,6 +70,11 @@ editor projection cannot acquire independent copies of the admitted and
 forbidden word lists. Presentation remains the consumer's responsibility: the
 API returns stable TextMate-compatible scope names and does not ship CSS.
 
+`themes/kotoba-awai.json` is the shared presentation map for the VS Code theme
+and the Kotoba site. It assigns colors to the existing scopes without changing
+the tokenizer contract; the site pins and verifies the manifest digest before
+rendering, and the VS Code color-theme files are generated from it.
+
 ## The TextMate projection
 
 `syntaxes/kotoba.tmLanguage.json` is the same catalog projected into the format
@@ -115,9 +120,17 @@ the editor before the compiler refuses it. Typed `(eval request)` is instead
 highlighted as admitted sugar: it names checked KIR by CID through the
 `:code/eval` ability and never means host evaluation.
 
+The extension also includes Awai light and dark color themes plus a runnable
+stdio language server. Its initial diagnostics reuse the forbidden-head
+pattern from the generated grammar and check delimiter and string closure.
+See [`editors/vscode/README.md`](editors/vscode/README.md) for installation and
+the current feature boundary.
+
 ```bash
 kbb --backend sci tools/gen-vscode-grammar.cljk           # project the grammar into it
 kbb --backend sci tools/gen-vscode-grammar.cljk --check   # gate: 1 stale/disagrees, 2 cannot tell
+kbb --backend sci tools/gen-vscode-theme.cljk             # project the shared Awai map
+kbb --backend sci tools/gen-vscode-theme.cljk --check     # gate: 1 stale, 2 cannot tell
 ```
 
 `--check` gates three things, and only the first is a copy: the grammar copy,

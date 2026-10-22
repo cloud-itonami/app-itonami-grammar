@@ -1,0 +1,197 @@
+{
+  "version": 1,
+  "palette": {
+    "name": "Awai",
+    "base": {
+      "aka": "#bc002d",
+      "ao": "#1e50a2",
+      "shiro": "#ffffff",
+      "kuro": "#14110f"
+    },
+    "mixes": {
+      "ao-deep": { "formula": "70% ao + 30% kuro", "color": "#1b3d76" },
+      "aka-deep": { "formula": "60% aka + 40% kuro", "color": "#790721" },
+      "sumi-2": { "formula": "78% kuro + 22% shiro", "color": "#484544" },
+      "sumi-5": { "formula": "60% kuro + 40% shiro", "color": "#72706f" },
+      "dark-ao": { "formula": "40% ao + 60% shiro", "color": "#a5b9da" },
+      "dark-aka": { "formula": "40% aka + 60% shiro", "color": "#e499ab" },
+      "dark-aka-deep": { "formula": "35% aka + 65% shiro", "color": "#e8a6b6" },
+      "dark-sumi-2": { "formula": "30% kuro + 70% shiro", "color": "#b9b8b7" },
+      "dark-sumi-5": { "formula": "20% kuro + 80% shiro", "color": "#d0cfcf" },
+      "light-selection": { "formula": "16% ao + 84% shiro", "color": "#dbe3f0" },
+      "dark-surface": { "formula": "90% kuro + 10% shiro", "color": "#2e2b29" }
+    }
+  },
+  "tokenOrder": [
+    "comment",
+    "string",
+    "escape",
+    "number",
+    "literal",
+    "keyword",
+    "form",
+    "builtin",
+    "host-op",
+    "definition",
+    "delimiter",
+    "symbol",
+    "forbidden"
+  ],
+  "tokens": {
+    "comment": {
+      "name": "Kotoba comments",
+      "siteKind": "comment",
+      "scopes": ["comment", "comment.line.semicolon.kotoba"],
+      "light": "#72706f",
+      "dark": "#d0cfcf",
+      "fontStyle": "italic"
+    },
+    "string": {
+      "name": "Kotoba strings",
+      "siteKind": "string",
+      "scopes": ["string.quoted.double.kotoba"],
+      "light": "#790721",
+      "dark": "#e8a6b6"
+    },
+    "escape": {
+      "name": "Kotoba escapes",
+      "scopes": ["constant.character.escape.kotoba"],
+      "light": "#bc002d",
+      "dark": "#e499ab",
+      "fontStyle": "bold"
+    },
+    "number": {
+      "name": "Kotoba numbers",
+      "siteKind": "number",
+      "scopes": ["constant.numeric.kotoba"],
+      "light": "#1e50a2",
+      "dark": "#a5b9da",
+      "fontStyle": "bold"
+    },
+    "literal": {
+      "name": "Kotoba literals",
+      "siteKind": "literal",
+      "scopes": ["constant.language.kotoba"],
+      "light": "#1e50a2",
+      "dark": "#a5b9da",
+      "fontStyle": "bold"
+    },
+    "keyword": {
+      "name": "Kotoba keywords",
+      "siteKind": "keyword",
+      "scopes": ["constant.other.keyword.kotoba"],
+      "light": "#1b3d76",
+      "dark": "#a5b9da",
+      "fontStyle": "bold"
+    },
+    "form": {
+      "name": "Kotoba forms and sugar",
+      "siteKind": "form",
+      "scopes": ["keyword.control.kotoba", "keyword.control.sugar.kotoba"],
+      "light": "#1b3d76",
+      "dark": "#a5b9da",
+      "fontStyle": "bold"
+    },
+    "builtin": {
+      "name": "Kotoba builtins",
+      "siteKind": "builtin",
+      "scopes": ["support.function.builtin.kotoba"],
+      "light": "#1e50a2",
+      "dark": "#a5b9da"
+    },
+    "host-op": {
+      "name": "Kotoba host operations",
+      "siteKind": "host-op",
+      "scopes": ["support.function.host-op.kotoba"],
+      "light": "#790721",
+      "dark": "#e8a6b6",
+      "fontStyle": "bold"
+    },
+    "definition": {
+      "name": "Kotoba definitions",
+      "siteKind": "definition",
+      "scopes": ["entity.name.function.kotoba"],
+      "light": "#14110f",
+      "dark": "#ffffff",
+      "fontStyle": "bold underline"
+    },
+    "delimiter": {
+      "name": "Kotoba delimiters",
+      "siteKind": "delimiter",
+      "scopes": ["punctuation.section.parens.kotoba"],
+      "light": "#484544",
+      "dark": "#b9b8b7"
+    },
+    "symbol": {
+      "name": "Kotoba symbols",
+      "siteKind": "symbol",
+      "scopes": ["variable.other.symbol.kotoba"],
+      "light": "#14110f",
+      "dark": "#ffffff"
+    },
+    "forbidden": {
+      "name": "Forbidden Kotoba forms",
+      "siteKind": "forbidden",
+      "scopes": ["invalid.illegal.forbidden-head.kotoba"],
+      "light": "#bc002d",
+      "dark": "#e499ab",
+      "fontStyle": "bold underline"
+    }
+  },
+  "themes": {
+    "light": {
+      "name": "Kotoba Awai Light",
+      "type": "light",
+      "ui": {
+        "editor.background": "#ffffff",
+        "editor.foreground": "#14110f",
+        "editorLineNumber.foreground": "#72706f",
+        "editorLineNumber.activeForeground": "#14110f",
+        "editorCursor.foreground": "#1e50a2",
+        "editor.selectionBackground": "#dbe3f0",
+        "editor.inactiveSelectionBackground": "#dbe3f080",
+        "editorIndentGuide.background1": "#d9d9d9",
+        "editorIndentGuide.activeBackground1": "#484544",
+        "editorGutter.background": "#ffffff",
+        "sideBar.background": "#f1f1f1",
+        "sideBar.foreground": "#14110f",
+        "activityBar.background": "#1e50a2",
+        "activityBar.foreground": "#ffffff",
+        "statusBar.background": "#1e50a2",
+        "statusBar.foreground": "#ffffff",
+        "panel.background": "#ffffff",
+        "focusBorder": "#1e50a2",
+        "button.background": "#1e50a2",
+        "button.foreground": "#ffffff",
+        "input.border": "#484544"
+      }
+    },
+    "dark": {
+      "name": "Kotoba Awai Dark",
+      "type": "dark",
+      "ui": {
+        "editor.background": "#14110f",
+        "editor.foreground": "#ffffff",
+        "editorLineNumber.foreground": "#b9b8b7",
+        "editorLineNumber.activeForeground": "#ffffff",
+        "editorCursor.foreground": "#a5b9da",
+        "editor.selectionBackground": "#1b3d76",
+        "editor.inactiveSelectionBackground": "#1b3d7680",
+        "editorIndentGuide.background1": "#484544",
+        "editorIndentGuide.activeBackground1": "#b9b8b7",
+        "editorGutter.background": "#14110f",
+        "sideBar.background": "#2e2b29",
+        "sideBar.foreground": "#ffffff",
+        "activityBar.background": "#2e2b29",
+        "activityBar.foreground": "#ffffff",
+        "statusBar.background": "#1e50a2",
+        "statusBar.foreground": "#ffffff",
+        "panel.background": "#14110f",
+        "focusBorder": "#a5b9da",
+        "button.background": "#1e50a2",
+        "button.foreground": "#ffffff",
+        "input.border": "#b9b8b7"
+      }
+    }
+  }
+}

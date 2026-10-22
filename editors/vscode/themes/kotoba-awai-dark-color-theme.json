@@ -1,0 +1,158 @@
+{
+  "$schema": "vscode://schemas/color-theme",
+  "name": "Kotoba Awai Dark",
+  "type": "dark",
+  "colors": {
+    "editor.inactiveSelectionBackground": "#1b3d7680",
+    "sideBar.foreground": "#ffffff",
+    "editorIndentGuide.activeBackground1": "#b9b8b7",
+    "statusBar.background": "#1e50a2",
+    "editor.foreground": "#ffffff",
+    "editor.background": "#14110f",
+    "sideBar.background": "#2e2b29",
+    "editorCursor.foreground": "#a5b9da",
+    "button.foreground": "#ffffff",
+    "editorGutter.background": "#14110f",
+    "activityBar.background": "#2e2b29",
+    "panel.background": "#14110f",
+    "editor.selectionBackground": "#1b3d76",
+    "editorIndentGuide.background1": "#484544",
+    "editorLineNumber.foreground": "#b9b8b7",
+    "editorLineNumber.activeForeground": "#ffffff",
+    "statusBar.foreground": "#ffffff",
+    "focusBorder": "#a5b9da",
+    "activityBar.foreground": "#ffffff",
+    "input.border": "#b9b8b7",
+    "button.background": "#1e50a2"
+  },
+  "tokenColors": [
+    {
+      "name": "Kotoba comments",
+      "scope": [
+        "comment",
+        "comment.line.semicolon.kotoba"
+      ],
+      "settings": {
+        "foreground": "#d0cfcf",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "Kotoba strings",
+      "scope": [
+        "string.quoted.double.kotoba"
+      ],
+      "settings": {
+        "foreground": "#e8a6b6"
+      }
+    },
+    {
+      "name": "Kotoba escapes",
+      "scope": [
+        "constant.character.escape.kotoba"
+      ],
+      "settings": {
+        "foreground": "#e499ab",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Kotoba numbers",
+      "scope": [
+        "constant.numeric.kotoba"
+      ],
+      "settings": {
+        "foreground": "#a5b9da",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Kotoba literals",
+      "scope": [
+        "constant.language.kotoba"
+      ],
+      "settings": {
+        "foreground": "#a5b9da",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Kotoba keywords",
+      "scope": [
+        "constant.other.keyword.kotoba"
+      ],
+      "settings": {
+        "foreground": "#a5b9da",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Kotoba forms and sugar",
+      "scope": [
+        "keyword.control.kotoba",
+        "keyword.control.sugar.kotoba"
+      ],
+      "settings": {
+        "foreground": "#a5b9da",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Kotoba builtins",
+      "scope": [
+        "support.function.builtin.kotoba"
+      ],
+      "settings": {
+        "foreground": "#a5b9da"
+      }
+    },
+    {
+      "name": "Kotoba host operations",
+      "scope": [
+        "support.function.host-op.kotoba"
+      ],
+      "settings": {
+        "foreground": "#e8a6b6",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Kotoba definitions",
+      "scope": [
+        "entity.name.function.kotoba"
+      ],
+      "settings": {
+        "foreground": "#ffffff",
+        "fontStyle": "bold underline"
+      }
+    },
+    {
+      "name": "Kotoba delimiters",
+      "scope": [
+        "punctuation.section.parens.kotoba"
+      ],
+      "settings": {
+        "foreground": "#b9b8b7"
+      }
+    },
+    {
+      "name": "Kotoba symbols",
+      "scope": [
+        "variable.other.symbol.kotoba"
+      ],
+      "settings": {
+        "foreground": "#ffffff"
+      }
+    },
+    {
+      "name": "Forbidden Kotoba forms",
+      "scope": [
+        "invalid.illegal.forbidden-head.kotoba"
+      ],
+      "settings": {
+        "foreground": "#e499ab",
+        "fontStyle": "bold underline"
+      }
+    }
+  ]
+}
