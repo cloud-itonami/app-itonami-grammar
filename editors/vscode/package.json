@@ -17,6 +17,9 @@
   "engines": {
     "vscode": "^1.91.0"
   },
+  "scripts": {
+    "test": "node --test"
+  },
   "activationEvents": [
     "onLanguage:kotoba"
   ],

@@ -13,7 +13,7 @@ function activate(context) {
     transport: TransportKind.stdio,
   };
   const clientOptions = {
-    documentSelector: [{ scheme: "file", language: "kotoba" }],
+    documentSelector: [{ language: "kotoba" }],
     outputChannelName: "Kotoba Language Server",
   };
 

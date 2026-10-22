@@ -26,7 +26,7 @@ function loadForbiddenPattern() {
 }
 
 const forbiddenPattern = loadForbiddenPattern();
-const connection = createConnection(ProposedFeatures.all);
+const connection = createConnection(ProposedFeatures.all, process.stdin, process.stdout);
 const documents = new TextDocuments(TextDocument);
 
 function diagnostic(document, start, end, code, message) {
@@ -149,7 +149,6 @@ connection.onInitialize(() => ({
   serverInfo: { name: "Kotoba Language Server", version: "0.2.0" },
 }));
 
-documents.onDidOpen(({ document }) => publishDiagnostics(document));
 documents.onDidChangeContent(({ document }) => publishDiagnostics(document));
 documents.onDidClose(({ document }) => {
   connection.sendDiagnostics({ uri: document.uri, diagnostics: [] });

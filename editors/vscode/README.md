@@ -48,13 +48,17 @@ Amu; there is no separate `.amu` source language.
 
 ## GitHub language display
 
-**It does not make GitHub display Kotoba.** GitHub reads
+The VS Code extension's language server applies only inside the editor. It
+does not make GitHub display Kotoba. GitHub reads
 `lib/linguist/languages.yml`, not an editor extension, and Kotoba is not in it
 yet — see [Linguist status](../../README.md#linguist-status) for the measured
 gap and why `.gitattributes` cannot stand in.
 
-It also has no language server behind it: no completion, no go-to-definition,
-no diagnostics. Grammar only.
+Current LSP support is deliberately small: forbidden-form, delimiter, and
+unterminated-string diagnostics on open/change/close. Completion,
+go-to-definition, hover, formatting, and compiler-backed diagnostics are not
+implemented yet. Grammar highlighting remains available independently of the
+language server.
 
 ## Install from the Marketplace
 
