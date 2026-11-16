@@ -30,10 +30,61 @@
 ;; projection drifting from the EDN, so that is what is guarded: `--check`
 ;; here, and `the-embedded-catalog-matches-the-edn` in the suite, which fails
 ;; rather than passes when it cannot read the EDN.
-(require '["node:fs" :as fs] '[kotoba.lang.text :as str])
+(require '["node:fs" :as fs]
+         '[cljs.reader :as reader]
+         '[clojure.string :as cstr]
+         '[kotoba.lang.text :as str])
 
 (def edn-path "resources/kotoba/lang/guest-grammar.edn")
 (def out-path "src/kotoba/grammar/embedded.cljk")
+(def kotoba-out-path "src/kotoba/grammar/embedded_native.kotoba")
+
+(defn- packed-names [items]
+  (str "|" (cstr/join "|" (sort (map name items))) "|"))
+
+(defn- membership-function [function-name field]
+  (str "(defn " function-name " [head :string] :bool\n"
+       "  (>= (string-index-of " field "\n"
+       "                       (string-concat \"|\" (string-concat head \"|\"))) 0))\n"))
+
+(defn- render-kotoba [txt]
+  (let [catalog (reader/read-string txt)
+        admitted (concat (:core-special-forms catalog)
+                         (:arithmetic catalog)
+                         (:comparisons catalog)
+                         (:predicates catalog)
+                         (:admitted-builtins catalog)
+                         (:string-head-host-ops catalog)
+                         (keys (:sugar catalog)))
+        source
+        (str ";; GENERATED FROM resources/kotoba/lang/guest-grammar.edn.\n"
+             ";; Regenerate and check with tools/gen-embedded.cljk.\n"
+             ";; This compact guest projection keeps the canonical EDN as the\n"
+             ";; only editable source; host consumers use embedded.cljk.\n"
+             "(ns kotoba.grammar.embedded-native\n"
+             "  {:kotoba/export [forbidden-head? admitted-head? string-host-op?\n"
+             "                   data-host-op? raw-memory-op? diagnostic-hint\n"
+             "                   strict-default?]} )\n\n"
+             "(def ^:private forbidden-heads " (pr-str (packed-names (:forbidden-heads catalog))) ")\n"
+             "(def ^:private admitted-heads " (pr-str (packed-names admitted)) ")\n"
+             "(def ^:private string-host-ops " (pr-str (packed-names (:string-head-host-ops catalog))) ")\n"
+             "(def ^:private data-host-ops " (pr-str (packed-names (:data-head-host-ops catalog))) ")\n"
+             "(def ^:private raw-memory-ops " (pr-str (packed-names (:raw-memory-ops catalog))) ")\n\n"
+             (membership-function "forbidden-head?" "forbidden-heads")
+             (membership-function "admitted-head?" "admitted-heads")
+             (membership-function "string-host-op?" "string-host-ops")
+             (membership-function "data-host-op?" "data-host-ops")
+             (membership-function "raw-memory-op?" "raw-memory-ops")
+             "(defn diagnostic-hint [head :string] :string\n  "
+             (reduce (fn [fallback [key hint]]
+                       (str "(if (string=? head " (pr-str key) ") "
+                            (pr-str hint) " " fallback ")"))
+                     "\"\""
+                     (reverse (sort-by key (:diagnostic-hints catalog))))
+             ")\n\n"
+             "(defn strict-default? [] :bool "
+             (if (get-in catalog [:strict-grammar :default]) "true" "false") ")\n")]
+    source))
 
 (defn- render [txt]
   (str ";; GENERATED — do not edit. Source: " edn-path "\n"
@@ -42,7 +93,7 @@
        ";; This is a projection of the EDN, not a second source of truth. If you\n"
        ";; edit it by hand `--check` fails, which is the whole point: two copies\n"
        ";; that can silently disagree are worse than one copy in the wrong format.\n"
-       "(ns kotoba.grammar.embedded)\n\n"
+       "(ns kotoba.grammar.embedded {:kotoba/export [catalog]})\n\n"
        ";; Quoted, not evaluated. Unlike a registry of strings and keywords this\n"
        ";; catalog is FULL of bare symbols — `try`, `catch`, `def` — because it\n"
        ";; is a list of forbidden and admitted call HEADS. Spliced in unquoted\n"
@@ -58,13 +109,21 @@
     (do (println "SCANNED\t0")
         (println "Refusing to answer: no" edn-path)
         (set! (.-exitCode js/process) 2))
-    (let [want (render (.toString (fs/readFileSync edn-path)))
-          have (when (fs/existsSync out-path) (.toString (fs/readFileSync out-path)))]
+    (let [txt (.toString (fs/readFileSync edn-path))
+          want (render txt)
+          want-kotoba (render-kotoba txt)
+          have (when (fs/existsSync out-path) (.toString (fs/readFileSync out-path)))
+          have-kotoba (when (fs/existsSync kotoba-out-path)
+                        (.toString (fs/readFileSync kotoba-out-path)))]
       (println "SCANNED\t1")
       (cond
         (not check?) (do (fs/writeFileSync out-path want)
-                         (println "wrote" out-path (count want) "bytes"))
-        (= want have) (println "OK" out-path "matches" edn-path)
-        :else (do (println "STALE" out-path "does not match" edn-path
+                         (fs/writeFileSync kotoba-out-path want-kotoba)
+                         (println "wrote" out-path (count want) "bytes")
+                         (println "wrote" kotoba-out-path (count want-kotoba) "bytes"))
+        (and (= want have) (= want-kotoba have-kotoba))
+        (do (println "OK" out-path "matches" edn-path)
+            (println "OK" kotoba-out-path "matches projection of" edn-path))
+        :else (do (println "STALE generated grammar source does not match" edn-path
                            "— run: kbb --backend sci tools/gen-embedded.cljk")
                   (set! (.-exitCode js/process) 1))))))
